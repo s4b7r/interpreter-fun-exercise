@@ -291,3 +291,29 @@ def test_powplustimes():
                     },
                 }
     assert ast == expected
+
+
+def test_found_error_case():
+    from ..main import parse_arithmetic_statement
+    ast = parse_arithmetic_statement('1+2*3^4+1')
+    expected = {
+                    'prev': {
+                        'prev': {
+                            'next': '1', 
+                            'op': '1'
+                        },
+                        'op': '+',
+                        'next': {
+                            'prev': '2',
+                            'op': '*',
+                            'next': {
+                                'prev': '3',
+                                'op': '^', 
+                                'next': '4', 
+                            }
+                        },
+                    },
+                    'op': '+',
+                    'next': '1'
+                }
+    assert ast == expected
