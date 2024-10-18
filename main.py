@@ -9,12 +9,15 @@ def parse_arithmetic_statement(code):
     for group, precedence in PRECEDENCE_GROUPS.items():
         for op in group:
             PRECEDENCE[op] = precedence
+
     code = code.replace(' ', '')
     code = code.translate(str.maketrans({c: f' {c} ' for c in PRECEDENCE.keys() if c != '1'}))
     tokens = code.split(' ')
+
     ast = {'op': '1', 'next': {'op': '1'}}
     roots_root = ast
     current_nexts_root = roots_root['next']
+
     for token in tokens:
         for ops_group in PRECEDENCE_GROUPS:
             if token in ops_group and token != '1':
@@ -32,6 +35,7 @@ def parse_arithmetic_statement(code):
                     current_nexts_root = current_nexts_root['next']
                     continue
         current_nexts_root['next'] = token
+
     ast = ast['next']
     return ast
 
