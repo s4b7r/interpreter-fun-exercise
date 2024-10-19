@@ -1,40 +1,28 @@
 def test_one():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement('1')
-    expected = {
-                    'op':'1',
-                    'next':'1',
-                }
+    expected = '1'
     assert ast == expected
 
 
 def test_space_one():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement(' 1')
-    expected = {
-                    'op':'1',
-                    'next':'1',
-                }
+    expected = '1'
     assert ast == expected
 
 
 def test_one_space():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement('1 ')
-    expected = {
-                    'op':'1',
-                    'next':'1',
-                }
+    expected = '1'
     assert ast == expected
 
 
 def test_one_spacespace():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement('1  ')
-    expected = {
-                    'op':'1',
-                    'next':'1',
-                }
+    expected = '1'
     assert ast == expected
 
 
@@ -44,10 +32,7 @@ def test_plus():
     expected = {
                     'op':'+',
                     'next':'2',
-                    'prev':{
-                        'op':'1',
-                        'next':'1'
-                    }
+                    'prev':'1'
                 }
     assert ast == expected
 
@@ -58,10 +43,7 @@ def test_plus_space():
     expected = {
                     'op':'+',
                     'next':'2',
-                    'prev':{
-                        'op':'1',
-                        'next':'1'
-                    }
+                    'prev':'1'
                 }
     assert ast == expected
 
@@ -72,10 +54,7 @@ def test_times_space():
     expected = {
                     'op':'*',
                     'next':'2',
-                    'prev':{
-                        'op':'1',
-                        'next':'1'
-                    }
+                    'prev':'1'
                 }
     assert ast == expected
 
@@ -87,10 +66,7 @@ def test_plusplus():
                     'next':'3',
                     'op':'+',
                     'prev':{
-                        'prev':{
-                            'op':'1',
-                            'next':'1'
-                        },
+                        'prev':'1',
                         'op':'+',
                         'next':'2',
                         },
@@ -103,10 +79,7 @@ def test_timesplus():
     ast = parse_arithmetic_statement('1*2+3')
     expected = {
                     'prev':{
-                        'prev':{
-                            'op':'1',
-                            'next':'1'
-                        },
+                        'prev':'1',
                         'op':'*',
                         'next':'2'
                     },
@@ -121,10 +94,7 @@ def test_timestimes():
     ast = parse_arithmetic_statement('1*2*3')
     expected = {
                     'prev':{
-                        'prev':{
-                            'op':'1',
-                            'next':'1'
-                        },
+                        'prev':'1',
                         'op':'*',
                         'next':'2'
                     },
@@ -138,10 +108,7 @@ def test_plustimes():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement('1+2*3')
     expected = {
-                    'prev':{
-                        'op':'1',
-                        'next':'1'
-                    },
+                    'prev':'1',
                     'op':'+',
                     'next':{
                         'prev':'2',
@@ -157,10 +124,7 @@ def test_plustimestimes():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement('1+2*3*4')
     expected = {
-                    'prev':{
-                        'op':'1',
-                        'next':'1'
-                    },
+                    'prev':'1',
                     'op':'+',
                     'next':{
                         'next':'4'
@@ -182,13 +146,10 @@ def test_plustimesplus():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement('1+2*3+4')
     expected = {
-                    'prev':{
-                        'op':'1',
-                        'next':'1'
-                    },
+                    'next':'4',
                     'op':'+',
-                    'next':{
-                        'prev':{
+                    'prev':{
+                        'next':{
                             'prev':'2'
                             ,
                             'op':'*',
@@ -196,7 +157,7 @@ def test_plustimesplus():
                             
                         },
                         'op':'+',
-                        'next':'4'
+                        'prev':'1'
                         ,
                     },
                 }
@@ -208,10 +169,7 @@ def test_divdiv():
     ast = parse_arithmetic_statement('1/2/3')
     expected = {
                     'prev':{
-                        'prev':{
-                            'op':'1',
-                            'next':'1'
-                        },
+                        'prev':'1',
                         'op':'/',
                         'next':'2',
                     },
@@ -226,10 +184,7 @@ def test_plustimespow():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement('1+2*3^4')
     expected = {
-                    'prev':{
-                        'op':'1',
-                        'next':'1'
-                    },
+                    'prev':'1',
                     'op':'+',
                     'next':{
                         'prev':'2',
@@ -249,10 +204,7 @@ def test_pluspowtimes():
     from ..main import parse_arithmetic_statement
     ast = parse_arithmetic_statement('1+2^3*4')
     expected = {
-                    'prev':{
-                        'op':'1',
-                        'next':'1'
-                    },
+                    'prev':'1',
                     'op':'+',
                     'next':{
                         'prev':{
@@ -273,10 +225,7 @@ def test_powplustimes():
     ast = parse_arithmetic_statement('1^2+3*4')
     expected = {
                     'prev':{
-                        'prev':{
-                            'op':'1',
-                            'next':'1'
-                            },
+                        'prev':'1',
                         'op':'^',
                         'next':'2'
                         
@@ -298,10 +247,7 @@ def test_found_error_case():
     ast = parse_arithmetic_statement('1+2*3^4+1')
     expected = {
                     'prev': {
-                        'prev': {
-                            'next': '1', 
-                            'op': '1'
-                        },
+                        'prev': '1',
                         'op': '+',
                         'next': {
                             'prev': '2',
@@ -316,4 +262,7 @@ def test_found_error_case():
                     'op': '+',
                     'next': '1'
                 }
+    from pprint import pprint
+    pprint(expected)
+    pprint(ast)
     assert ast == expected
